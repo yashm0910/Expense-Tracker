@@ -3,6 +3,18 @@ const userModel = require("../models/user.model")
 // console.log("Secret in middleware:", process.env.JWT_SECRET);
 // console.log("Secret length:", process.env.JWT_SECRET?.length);
 
+function authFast(req, res, next) {
+    const token = req.cookies.token
+    if (!token) return res.status(401).json({ message: "not logged in" })
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = { _id: new mongoose.Types.ObjectId(decoded.id) }
+        next()
+    } catch (err) {
+        return res.status(401).json({ message: "Invalid or expired credentials" })
+    }
+}
+
 async function authMiddleware(req,res,next){
     // console.log("Cookies received:", req.cookies);
     // console.log("Token:", req.cookies?.token ? "PRESENT" : "MISSING");
@@ -36,3 +48,4 @@ async function authMiddleware(req,res,next){
 }
 
 module.exports = authMiddleware
+module.exports.authFast = authFast

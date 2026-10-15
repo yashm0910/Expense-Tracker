@@ -2,6 +2,7 @@ const express = require("express")
 const cookieParser = require("cookie-parser") 
 const authRouter = require("../src/routes/auth.routes")
 const expenseRouter = require("../src/routes/expense.routes")
+const cors = require("cors");
 
 const app = express()
 
@@ -14,6 +15,11 @@ app.get("/status",(req,res)=>{
         message: "status ok"
     })
 })
+
+// app.use(cors({
+//     origin: "https://your-frontend.vercel.app",  // exact frontend URL
+//     credentials: true                             // allow cookies
+// }));
 
 app.use("/users/auth",authRouter)
 app.use("/api/expenses",expenseRouter)

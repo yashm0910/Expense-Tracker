@@ -20,6 +20,7 @@ const apiLimiter = rateLimit({
         status: "error",
         message: "Too many requests. Please slow down."
     },
+    skip: (req) => req.headers["x-load-test"] === "true",
     standardHeaders: true,
     legacyHeaders: false
 });

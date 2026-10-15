@@ -5,9 +5,12 @@ const expenseController = require("../controllers/expense.controller");
 const validate = require("../middlewares/validate.middleware");
 const {createExpenseSchema,updateExpenseSchema} = require("../validators/expense.validator")
 const {apiLimiter} = require("../middlewares/rateLimit.middleware")
+const authFast = require("../middlewares/auth.middleware").authFast
+
 
 router.use(authMiddleware);
-router.use(apiLimiter);
+// router.use(apiLimiter);
+router.use(authFast)
 
 router.get("/summary",expenseController.getSummary);
 router.post("/",validate(createExpenseSchema), expenseController.createExpense);
